@@ -16,7 +16,12 @@ const infoKanapApi = async function () {       // async fait qu'une fonction ren
 
 async function miseEnPlaceProduitSurLaPage() {       // Creation d'une fonction qui permet l'affichage dans la page
     await infoKanapApi();                            // pour pouvoir mettre en place mes kanaps je dois d'abord appeler mes info provenant de l'API
-    products.forEach((product) => {                  // Me permet d'exécuter la fonction sur chaque élément product du tableau products.
+    products.forEach((product) => {  
+        /*
+        const a = document.creatELEMENT("a");
+        a.href = ""
+        a.innerHTML =
+        */                // Me permet d'exécuter la fonction sur chaque élément product du tableau products.
         items.innerHTML +=                           // Me permet d'inserer mon HTML dans la variable ..... #items
           ` <a href="./product.html?id=${product._id}">  
             <article>
