@@ -10,7 +10,7 @@ const infoKanapApi = async function () {       // async fait qu'une fonction ren
             return (products = data);                  // demande d'un retour de reponse (les datas) que je "nomme" products
         })
         .catch (function (Error){                               // Si ma promesse initiale est rejetée 'catch'
-            console.log(`J'en connais Un qui s'est planté`);    // s'il apparait dans la console, il y a un problème
+            console.log(`J'en connais Un qui s'est planté` + Error);    // s'il apparait dans la console, il y a un problème
         });
 };
 
