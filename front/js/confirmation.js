@@ -1,2 +1,5 @@
-fetch('http://localhost:3000/api/products')
-.then(res => console.log(res))
+
+
+let urlparamS = new URLSearchParams(window.location.search);    
+let orderId = urlparamS.get("orderId");  
+document.getElementById("orderId").textContent = orderId;
