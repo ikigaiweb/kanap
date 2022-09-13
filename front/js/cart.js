@@ -281,8 +281,6 @@ validateEmail();
 submit.addEventListener("click", function (event) { // je crée une "ecoute" du click 
         event.preventDefault(); // pour l'instant tu ne fais rien 
 
-
-        /***********/
         function submitButton() {
 
             function emptyFirstName() {
@@ -294,7 +292,7 @@ submit.addEventListener("click", function (event) { // je crée une "ecoute" du 
                     return true; // et je laisse passer a l'etape suivante
                 }
             }
-            let emptyFirstNameVar = emptyFirstName(); // Je n'oublie pas de rappeler la fonction
+            let emptyFirstNameVar = emptyFirstName(); // Je n'oublie pas de rappeler la fonction en lui donnant un nom 
 
             function emptyLastName() {
                 if (lastName.value == "") {
@@ -305,7 +303,7 @@ submit.addEventListener("click", function (event) { // je crée une "ecoute" du 
                     return true;
                 }
             }
-            emptyLastName();
+            let emptyLastNameVar = emptyLastName();
 
             function emptyAddress() {
                 if (address.value == "") {
@@ -316,7 +314,7 @@ submit.addEventListener("click", function (event) { // je crée une "ecoute" du 
                     return true;
                 }
             }
-            emptyAddress();
+            let emptyAddressVar = emptyAddress();
 
             function emptyCity() {
                 if (city.value == "") {
@@ -327,7 +325,7 @@ submit.addEventListener("click", function (event) { // je crée une "ecoute" du 
                     return true;
                 }
             }
-            emptyCity();
+            let emptyCityVar = emptyCity();
 
             function emptyEmail() {
                 if (email.value == "") {
@@ -338,16 +336,15 @@ submit.addEventListener("click", function (event) { // je crée une "ecoute" du 
                     return true;
                 }
             }
-            emptyEmail();
+            let emptyEmailVar = emptyEmail();
 
             if (basket == null || basket == 0) { // avant d'aller plus loin je m'assure que le panier n 'est pas vide
                 alert("Il semblerait que vous ayez oublier de completer votre panier. Desirez vous retourner sur la page d'acceuil ?")
                 location.href = "index.html";
+
+            } else if (emptyFirstNameVar != true || emptyLastNameVar != true || emptyAddressVar != true || emptyCityVar != true || emptyEmailVar != true) {
+                return false
             } else {
-
-
-                /***********/
-
 
                 function recupIdProduct() {
                     let idProduct = []; // on va devoir recreer un nouveau tableau 
@@ -355,11 +352,9 @@ submit.addEventListener("click", function (event) { // je crée une "ecoute" du 
                         let eachProductId = basket[i].id; // je nomme = chaque i id qui se trouve dans le basket               
                         idProduct.push(eachProductId);
                     }
-                    return idProduct                                   // le tableau revient rempli de id des elements commandés
+                    return idProduct // le tableau revient rempli de id des elements commandés
                 }
                 let recupArray = recupIdProduct();
-
-                /***********/
 
                 let recupInfo = {
                     contact: {
@@ -381,16 +376,14 @@ submit.addEventListener("click", function (event) { // je crée une "ecoute" du 
                     body: JSON.stringify(recupInfo)
                 };
 
-                /***********/
-
                 fetch("http://localhost:3000/api/products/order", request)
                     .then(function (response) {
                         return response.json();
                     })
                     .then(data => {
                         console.log(data.orderId);
-                        //localStorage.clear();
-                        //location.href = "confirmation.html?orderId=" + data.orderId;
+                        // localStorage.clear();
+                        location.href = "confirmation.html?orderId=" + data.orderId;
                     }).catch(error => {
                         console.log(error);
                     })
