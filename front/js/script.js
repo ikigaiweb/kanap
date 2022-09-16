@@ -1,6 +1,6 @@
 const items = document.getElementById(`items`);        // ***informer où ce sera afficher en l'occurence là où #items sera
 
-const infoKanapApi = async function () {       // async fait qu'une fonction renvoie une promesse * await fait qu'une fonction attend une Promise
+const infoKanapApi = async function () {       // async fait qu'une fonction renvoie une promesse * await fait qu'une fonction attend une Promise * elle me permet d'aller chercher les info dans lAPI
     await fetch("http://localhost:3000/api/products")  // Methode Fetch qui me permet de recuperer les données du serveur
         .then(function(response){                      // Promesse de recevoir une réponse de l'api 
             console.log(response);                     // verification que je recois bien la réponse
@@ -9,15 +9,15 @@ const infoKanapApi = async function () {       // async fait qu'une fonction ren
         .then(function(data){                          // une promesse de pouvoir "loguer" les datas (mes données)
             return (products = data);                  // demande d'un retour de reponse (les datas) que je "nomme" products
         })
-        .catch (function (Error){                                     // Si ma promesse initiale est rejetée 'catch'
+        .catch (function (Error){                                     // Si ma promesse initiale est rejetée 'catch' (obligatoire avec un then)
             console.log(`J'en connais Un qui s'est planté` + Error);  // s'il apparait dans la console, il y a un problème
         });
 };
 
-async function miseEnPlaceProduitSurLaPage() {
+async function miseEnPlaceProduitSurLaPage() {                        // fonction qui me permet d'installer mes éléments
     try{                                                              // le "try" instruction définit un bloc de code à exécuter (à essayer).
-      await infoKanapApi();
-      products.forEach((product) => {
+      await infoKanapApi();                                           // je rapelle les info obtenu de l' API
+      products.forEach((product) => {                                 // boucle foreach " à chaque"  * permet d'exécuter une fonction donnée sur chaque élément du tableau.  
           //Création des emplacements pour les éléments venant de l'API
           const productContainer = document.getElementById("items");  // création d'une constante qui est liée à # items
           const productLink = document.createElement("a");            // création d'une constante qui crée un <a></a>

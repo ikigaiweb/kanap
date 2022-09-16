@@ -26,13 +26,6 @@ async function displayInfo() {                                                  
   addToTheCart.addEventListener('click', (event) => {                           // Création d'une ecoute evenement (le click du bouton #addToCart)
     event.preventDefault();                                                     // Je l'empeche momentanement de faire son travail  
 
-
-
-
-
-
-
-    
     if (itemQuantity.value > 0 && itemQuantity.value < 101 && ColorSet.value != "") { // Si le chiffre indique par le client est superieur ou egal à 0 et inferieur à 100 et qu'il a une couleur choisie 
       let kanapItem = {                                                         // Creation d'un objet qui liste les produits demandés
         id: productID,
@@ -52,17 +45,17 @@ async function displayInfo() {                                                  
           let update = false;                                                   // Je le declare pour l'utiliser sous forme true apres 
           
           for (let i = 0; i < basket.length; i++) {                             // Les boucles for sont pratiques pour exécuter le même code encore et encore, à chaque fois avec une valeur différente.
-           var basketIQuantity = basket[i].quantity;
-           var itemQuantityValue = itemQuantity.value;
-           var itemQuantityValueParse = parseInt(itemQuantityValue);
-           var basketIQuantityParse = parseInt(basketIQuantity);
-           var totalKanapItem = itemQuantityValueParse + basketIQuantityParse;
-           if (basketIQuantity > 100) {
+           var basketIQuantity = basket[i].quantity;                            // ma variable = la quantité de chaques kanapés
+           var itemQuantityValue = itemQuantity.value;                          // la valeur inscrite par le client (nombre de kanap désiré)
+           var itemQuantityValueParse = parseInt(itemQuantityValue);            // il me faut juste premiers nombres 
+           var basketIQuantityParse = parseInt(basketIQuantity);                // il me faut juste premiers nombres
+           var totalKanapItem = itemQuantityValueParse + basketIQuantityParse;  // mon total est egal à la quantité qui est dans le localStorage + le chiffre inscrit a l'instant par le client dans l'input
+           if (basketIQuantity > 100) {                                         // si la quantité de mon local storage à 100 
                alert("Vous avez dépassé la limite autorisé de 100 articles identique en meme temps")
-               return false
-           }else if (kanapItem.id == basket[i].id && kanapItem.color == basket[i].color && totalKanapItem > 100){
-            alert("attention vous ne pouvez pas commander + de 100 articles identique en meme temps")
-            return false
+               return false                                                     // retourne faux (ca bloquera )
+           }else if (kanapItem.id == basket[i].id && kanapItem.color == basket[i].color && totalKanapItem > 100){ // sinon si meme kanap , meme couleur et total du LocalStorage + input value  superieur a 100
+            alert("attention vous ne pouvez pas commander + de 100 articles identique en meme temps")// Alerte général
+            return false                                                        // retourne faux
            }
            
             else if (kanapItem.id == basket[i].id && kanapItem.color == basket[i].color) { // Si l'id demandé est egale a celle du panier, si la couleur demandé est égale a celle du panier

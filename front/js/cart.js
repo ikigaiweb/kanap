@@ -1,4 +1,4 @@
-//Récupération des produits stockés dans le localstorage
+//Récupération des produits stockés dans l'api
 async function infoProductApis(id) {                                           // on rapelle l'API car certaines info ne se trouve pas dans le localStorage  ** doit être lié a id  
     let response = await fetch("http://localhost:3000/api/products/" + id)     // je recherche à avoir l'ID de chaque produit qui se trouve dans l'API
     if (response.ok) {                                                         // si aucune erreur dans ma demande
@@ -89,7 +89,7 @@ async function displayCart() {                                                 /
         deleteItems.innerHTML = "Supprimer";                                   // j'ecris le mot supprimer sur l'ecran
         cartItemContentSettingsDelete.appendChild(deleteItems);                // cartItemContentSettingsDelete a pour enfant deleteItems
 
-        // *** event listener pour supprimer un article (pas besoin de fair eune focntion pour les rajouter, idem pour update)
+        // *** event listener pour supprimer un article (pas besoin de fair une fonction pour les rajouter, idem pour update)
         deleteItems.addEventListener("click", (event) => {                     // ****** on va écouter le click de chaque element du tableau
             let basket = JSON.parse(localStorage.getItem("localBasket"));      // rappel de la sauvegarde car on est dans uen nouvelle fonction
                                       
@@ -105,7 +105,7 @@ async function displayCart() {                                                 /
                 refreshTotal();                                                // j appelle la fonction pour mettre à jour le total
             }
         })
-        itemQuantity.addEventListener("change", (event) => {                   // ***
+        itemQuantity.addEventListener("change", (event) => {                   // quand le client clique sur la double fleches (haut et bas) je ...
             
             let basket = JSON.parse(localStorage.getItem("localBasket"));      // Nouvelle fonction, ont a pas accès au ancienne info donc je la reappelle
             let article = event.target.closest("article");                     // Je recupére l'article le plus proche (donc le parent)
@@ -116,8 +116,7 @@ async function displayCart() {                                                 /
 
             // J'ecoute le changement de la variable, du coup, l'event déclanché contient la valeur
             let newValue = event.target.value; // **************je dois cree un let car en 1 fois il bloque donc en 2 fois grace au let
-
-            
+  
             basket.forEach(element => {                                        // je parcours le panier
                 
                 if (element.id == id && element.color == color) {              // si je trouve meme id et color c'est bon
@@ -129,7 +128,7 @@ async function displayCart() {                                                 /
                 }
             });
            
-            localStorage.setItem("localBasket", JSON.stringify(basket));       //*** pas de fonction saveBasket, une focntion pour 1 ligne est contreproductif, le but est de reduire le nombre de ligne, pas l'augmenter
+            localStorage.setItem("localBasket", JSON.stringify(basket));       // Sauvegarde *** pas de fonction saveBasket, une focntion pour 1 ligne est contreproductif, le but est de reduire le nombre de ligne, pas l'augmenter
     
             refreshTotal();                                                    // Mise a jour du total après modification
 
@@ -138,7 +137,7 @@ async function displayCart() {                                                 /
     
     refreshTotal()                                                             // je remets a jour le total pour la premiere fois en dehors du for pour eviter qu'il ne soit appeler a chaque article
 }
-displayCart();                                                                 // je rapelle la fonction entiere
+displayCart();                                                                 // je rapelle la fonction entiere qui me permet d'afficher a l'ecran toutes les infos
 
 async function refreshTotal() {                                                // création d'une fonction refresh pour mettre a jour le total
     let basket = JSON.parse(localStorage.getItem("localBasket"));              //basket n'existe pas dans cette fonction du coup ont le récupére
@@ -164,7 +163,7 @@ async function refreshTotal() {                                                /
     }
     document.querySelector("#totalPrice").innerText = finalTotal;              // j'ecris ce chiffre là où l'ID me le demande
 }
-
+//                                                                             // je en la rapelle pas apres car elle est directement rappelé dans les fonctions qui ont besoin d'elle
 
 /* ************************** FORMULAIRE ****************************************** */
 
@@ -186,183 +185,179 @@ let emailErr = document.getElementById("emailErrorMsg");                       /
 
 let nameRegExp = /^[a-zA-Zéêëèîïâäàçù ,.'-]{0,70}$/;                           // regex pour les lettres de 0 a 70 caractères
 let emailRegExp = /^([a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,3}){0,90}$/; // regex alphanumerique + @ et .  pour le mail
-let addressRegExp = /^[a-zA-Zéêëèîïâäàçù0-9 ,.'-]{0,50}$/;                     // regex alphanumerique pour les adresses
+let addressRegExp = /^[a-zA-Zéêëèîïâäàçù0-9 ,.'-]{0,50}$/;                     // regex alphanumerique pour les adresses     
 
 /* ************************** FIRST NAME *************************************** */
+// je fais mes tests en dehors du bouton submit parce qu eje veux qu'il me signale avant le click qu'il y a un soucis
 
-let firstNameVal = firstName.value;
-
-firstName.addEventListener("input", function () {                              //  création d'un addEventListener pour l'input du prénom
-    validateFirstName();                                                       //
+firstName.addEventListener("input", function () {                              //  création d'un addEventListener pour l'input du prénom  j'ecoute pour voir si il repond a ma demande (pas de chiffre)
+    validateFirstName();                                                       // c'est la fonction qui sera exécuté lorsque on ecrira dans l'input firstName (suite a notre ecoute)       
 });
 
-let testFirstName = nameRegExp.test(firstName.value);                          //
-
-function validateFirstName() {                                                 //
-    let testFirstName = nameRegExp.test(firstName.value);                      // 
-    if (testFirstName == false) {                                              //
-        firstNameErr.innerText = "Veuillez saisir svp votre prénom correct";   //
-        return false;                                                          //
+function validateFirstName() {                                                 // création de la fonction que je vais ecouter pour valider qu'il n'y a pas "d'erreur de frappe"
+    let testFirstName = nameRegExp.test(firstName.value);                      // je teste avec le regex ce qu'ecrit le client voir qu'il n'y est pas d'erreur
+    if (testFirstName == false) {                                              // si mon test ne passe pas 
+        firstNameErr.innerText = "Veuillez saisir svp votre prénom correct";   // alors on ecrit un message d'erreur dessous "bla bla bla"
+        return false;                                                          // et on le declare faux
     } else {
-        firstNameErr.innerText = "";                                           //
-        return true;                                                           //
+        firstNameErr.innerText = "";                                           // puisqu'il n 'y a pas erreur on n'ecris pas de message erreur! 
+        return true;                                                           // et on le declare vrai
     }
 }
-validateFirstName();                                                           // 
+let validateFirstNameVar = validateFirstName();                                // j'appelle la fonction en dehors de la fonction
 
 /* ************************** LAST NAME *************************************** */
 
-let lastNameVal = lastName.value;     /* *********************/
-
-lastName.addEventListener("input", function () {                                //  création d'un addEventListener pour l'input du nom
-    validateLastName();
+lastName.addEventListener("input", function () {                               //  création d'un addEventListener pour l'input du nom  j'ecoute pour voir si il repond a ma demande (pas de chiffre)
+    validateLastName();                                                        // c'est la fonction qui sera exécuté lorsque on ecrira dans l'input lastName (suite a notre ecoute)    
 });
 
-function validateLastName() {
-    let testLastName = nameRegExp.test(lastName.value);
-    if (testLastName == false) {
-        lastNameErr.innerText = "Veuillez saisir svp votre nom correct";
-        return false;
+function validateLastName() {                                                  // création de la fonction LastName que je vais ecouter pour valider qu'il n'y a pas "d'erreur de frappe"
+    let testLastName = nameRegExp.test(lastName.value);                        // je teste avec le regex ce qu'ecrit le client voir qu'il n'y est pas d'erreur
+    if (testLastName == false) {                                               // si mon test ne passe pas
+        lastNameErr.innerText = "Veuillez saisir svp votre nom correct";       // alors on ecrit un message d'erreur dessous "bla bla bla"
+        return false;                                                          // et on le declare faux
     } else {
-        lastNameErr.innerText = "";
+        lastNameErr.innerText = "";                                            // puisqu'il n 'y a pas erreur on n'ecris pas de message erreur! 
         return true;
     }
 }
-validateLastName();
+let validateLastNameVar = validateLastName();                                  // j'appelle la fonction en dehors de la fonction
 
 /* **************************** ADDRESS ************************************* */
-let addressVal = address.value;
 
-address.addEventListener("input", function () {
-    validateAddress();
+address.addEventListener("input", function () {                                // création d'un addEventListener pour l'input de m'adresse j'ecoute pour voir si il repond a ma demande (alpha numérique)
+    validateAddress();                                                         // c'est la fonction qui sera exécuté lorsque on ecrira dans l'input adress (suite a notre ecoute)    
 });
 
-function validateAddress() {
-    let testaddress = addressRegExp.test(address.value);
-    if (testaddress == false) {
-        addressErr.textContent = "Veuillez saisir correctement votre adresse svp ";
-        return false;
+function validateAddress() {                                                   // création de la fonction que je vais ecouter pour valider qu'il n'y a pas "d'erreur de frappe"
+    let testaddress = addressRegExp.test(address.value);                       // je teste avec le regex ce qu'ecrit le client voir qu'il n'y est pas d'erreur
+    if (testaddress == false) {                                                // si mon test ne passe pas
+        addressErr.textContent = "Veuillez saisir correctement votre adresse svp ";// alors on ecrit un message d'erreur dessous "bla bla bla"
+        return false;                                                          // et on le declare faux
     } else {
-        addressErr.textContent = "";
+        addressErr.textContent = "";                                           // puisqu'il n 'y a pas erreur on n'ecris pas de message erreur! 
         return true;
     }
 }
-validateAddress();
+let validateAddressVar = validateAddress();                                    // j'appelle la fonction en dehors de la fonction
 
 /* ***************************** TOWN ************************************ */
 
-city.addEventListener("input", function () {
-    validateCity();
+city.addEventListener("input", function () {                                   // création d'un addEventListener pour l'input city  j'ecoute pour voir si il repond a ma demande (pas de chiffre)
+    validateCity();                                                            // c'est la fonction qui sera exécuté lorsque on ecrira dans l'input City (suite a notre ecoute)    
 });
-let cityVal = city.value;
 
-function validateCity() {
-    let testCity = nameRegExp.test(city.value);
-    if (testCity == false) {
-        cityErr.textContent = "Veuillez ecrire le nom exact de votre ville svp ";
-        return false;
+function validateCity() {                                                      // création de la fonction que je vais ecouter pour valider qu'il n'y a pas "d'erreur de frappe"
+    let testCity = nameRegExp.test(city.value);                                // je teste avec le regex ce qu'ecrit le client voir qu'il n'y est pas d'erreur
+    if (testCity == false) {                                                   // si mon test ne passe pas
+        cityErr.textContent = "Veuillez ecrire le nom exact de votre ville svp ";// alors on ecrit un message d'erreur dessous "bla bla bla"
+        return false;                                                          // et on le declare faux
     } else {
-        cityErr.textContent = "";
+        cityErr.textContent = "";                                              // puisqu'il n 'y a pas erreur on n'ecris pas de message erreur! 
         return true;
     }
 }
-validateCity();
+let validateCityVar = validateCity();                                          // j'appelle la fonction en dehors de la fonction
 
 /* ***************************** E-MAIL ************************************ */
 
-email.addEventListener("input", function () {
-    validateEmail();
+email.addEventListener("input", function () {                                  //  création d'un addEventListener pour l'input email j'ecoute pour voir si il repond a ma demande (xxx@xxxx.xxx)
+    validateEmail();                                                           // c'est la fonction qui sera exécuté lorsque on ecrira dans l'input email (suite a notre ecoute)    
 });
-let emailVal = email.value;
 
-function validateEmail() {
-    let testEmail = emailRegExp.test(email.value);
-    if (testEmail == false) {
-        emailErr.textContent = "Veuillez saisir correctement votre E-mail svp";
-        return false;
+function validateEmail() {                                                     // création de la fonction que je vais ecouter pour valider qu'il n'y a pas "d'erreur de frappe"
+    let testEmail = emailRegExp.test(email.value);                             // je teste avec le regex ce qu'ecrit le client voir qu'il n'y est pas d'erreur
+    if (testEmail == false) {                                                  // si mon test ne passe pas
+        emailErr.textContent = "Veuillez saisir correctement votre E-mail svp";// alors on ecrit un message d'erreur dessous "bla bla bla"
+        return false;                                                          // et on le declare faux
     } else {
-        emailErr.textContent = "";
+        emailErr.textContent = "";                                             // puisqu'il n 'y a pas erreur on retire de message erreur! 
         return true;
     }
 }
-validateEmail();
+let validateEmailVar = validateEmail();                                        // j'appelle la fonction en dehors de la fonction
 
 /* ***************************** FIN DU FORMULAIRE ************************************ */
 
 /* ***************************** BOUTON ORDER ************************************ */
 
-submit.addEventListener("click", function (event) {                            // *** je crée une "ecoute" du click 
+submit.addEventListener("click", function (event) {                            // *** je crée une "ecoute" du click avec tous les evenement qui doivent se passer 
         event.preventDefault();                                                // *** pour l'instant tu ne fais rien 
-
+       
         function submitButton() {                                              // Creation d'une fonction avec touytes les conditions qui permettre de confirmer ma commande
+                                                     
+            let validateFirstNameVar = validateFirstName();                    // je rapelle ma fonction car quand je click je ne veux pas qu'il continue si il est false
+            let validateLastNameVar = validateLastName();                      // je rapelle ma fonction car quand je click je ne veux pas qu'il continue si il est false
+            let validateAddressVar = validateAddress();                        // je rapelle ma fonction car quand je click je ne veux pas qu'il continue si il est false
+            let validateCityVar = validateCity();                              // je rapelle ma fonction car quand je click je ne veux pas qu'il continue si il est false
+            let validateEmailVar = validateEmail();                            // je rapelle ma fonction car quand je click je ne veux pas qu'il continue si il est false
 
-            function emptyFirstName() {                                        //
+            function emptyFirstName() {                                        // création d'une fonction que je vais écouter qui me dira le "prenom" est vide ou pas 
                 if (firstName.value == "") {                                   // si l'input est vide (sa valeur) 
-                    firstNameErr.textContent = "Vous m'avez oublié";           // alors dessous j'ecris ....
-                    return false;                                              // je "l'empeche" d'aller plus loin en l'annoncant faux
+                    firstNameErr.textContent = "Vous m'avez oublié";           // alors on ecrit un message d'erreur dessous "Vous m'avez oublié"
+                    return false;                                              // je "l'empeche" d'aller plus loin en le declarant faux
                 } else {
-                    firstNameErr.textContent = "";                             // si il rempli les conditions a lors je retire le texte
+                    firstNameErr.textContent = "";                             // puisqu'il n 'y a pas erreur on retire de message erreur! 
                     return true;                                               // et je laisse passer a l'etape suivante
                 }
             }
-            let emptyFirstNameVar = emptyFirstName();                          // Je n'oublie pas de rappeler la fonction en lui donnant un nom 
+            let emptyFirstNameVar = emptyFirstName();                          // Je n'oublie pas de rappeler la fonction en lui donnant un nom (variable) 
 
-            function emptyLastName() {
-                if (lastName.value == "") {
-                    lastNameErr.textContent = "Vous m'avez oublié";
-                    return false;
+            function emptyLastName() {                                         // création d'une fonction que je vais écouter qui me dira le "nom" est vide ou pas
+                if (lastName.value == "") {                                    // si l'input est vide (sa valeur)
+                    lastNameErr.textContent = "Vous m'avez oublié";            // alors on ecrit un message d'erreur dessous "Vous m'avez oublié"
+                    return false;                                              // je "l'empeche" d'aller plus loin en le declarant faux
                 } else {
-                    lastNameErr.textContent = "";
-                    return true;
+                    lastNameErr.textContent = "";                              // puisqu'il n 'y a pas erreur on retire de message erreur! 
+                    return true;                                               // et je laisse passer a l'etape suivante
                 }
             }
-            let emptyLastNameVar = emptyLastName();
+            let emptyLastNameVar = emptyLastName();                            // Je n'oublie pas de rappeler la fonction en lui donnant un nom (variable) 
 
-            function emptyAddress() {
-                if (address.value == "") {
-                    addressErr.textContent = "Vous m'avez oublié";
-                    return false;
+            function emptyAddress() {                                          // création d'une fonction que je vais écouter qui me dira l' "adresse" est vide ou pas
+                if (address.value == "") {                                     // si l'input est vide (sa valeur)
+                    addressErr.textContent = "Vous m'avez oublié";             // alors on ecrit un message d'erreur dessous "Vous m'avez oublié"
+                    return false;                                              // je "l'empeche" d'aller plus loin en le declarant faux
                 } else {
-                    addressErr.textContent = "";
-                    return true;
+                    addressErr.textContent = "";                               // puisqu'il n 'y a pas erreur on retire de message erreur! 
+                    return true;                                               // et je laisse passer a l'etape suivante
                 }
             }
-            let emptyAddressVar = emptyAddress();
+            let emptyAddressVar = emptyAddress();                              // Je n'oublie pas de rappeler la fonction en lui donnant un nom (variable)
 
-            function emptyCity() {
-                if (city.value == "") {
-                    cityErr.textContent = "Vous m'avez oublié";
-                    return false;
+            function emptyCity() {                                             // création d'une fonction que je vais écouter qui me dira le "city" est vide ou pas
+                if (city.value == "") {                                        // si l'input est vide (sa valeur)
+                    cityErr.textContent = "Vous m'avez oublié";                // alors on ecrit un message d'erreur dessous "Vous m'avez oublié"
+                    return false;                                              // je "l'empeche" d'aller plus loin en le declarant faux
                 } else {
-                    cityErr.textContent = "";
-                    return true;
+                    cityErr.textContent = "";                                  // puisqu'il n 'y a pas erreur on retire de message erreur! 
+                    return true;                                               // et je laisse passer a l'etape suivante
                 }
             }
-            let emptyCityVar = emptyCity();
+            let emptyCityVar = emptyCity();                                    // Je n'oublie pas de rappeler la fonction en lui donnant un nom (variable)
 
-            function emptyEmail() {
-                if (email.value == "") {
-                    emailErr.textContent = "Vous m'avez oublié";
-                    return false;
+            function emptyEmail() {                                            // création d'une fonction que je vais écouter qui me dira l'"email" est vide ou pas
+                if (email.value == "") {                                       // si l'input est vide (sa valeur)
+                    emailErr.textContent = "Vous m'avez oublié";               // alors on ecrit un message d'erreur dessous "Vous m'avez oublié"
+                    return false;                                              // je "l'empeche" d'aller plus loin en le declarant faux
                 } else {
-                    emailErr.textContent = "";
-                    return true;
+                    emailErr.textContent = "";                                 // puisqu'il n 'y a pas erreur on retire de message erreur! 
+                    return true;                                               // et je laisse passer a l'etape suivante
                 }
             }
-            let emptyEmailVar = emptyEmail();
+            let emptyEmailVar = emptyEmail();                                  // Je n'oublie pas de rappeler la fonction en lui donnant un nom (variable)
 
             let basket = JSON.parse(localStorage.getItem("localBasket"));      // je rapelle mon localStorage pour avoir des infos dont j'ai besoin
             if (basket == null || basket == 0) {                               // avant d'aller plus loin je m'assure que le panier n 'est pas vide
                 alert("Il semblerait que vous ayez oublier de completer votre panier. Desirez vous retourner sur la page d'acceuil ?")
                 location.href = "index.html";                                  // si elle confirme elel sera revoyer a la page d'acceuil (son panier etant vide)
 
-            } else if (emptyFirstNameVar != true || emptyLastNameVar != true || emptyAddressVar != true || emptyCityVar != true || emptyEmailVar != true) {
-                return false                                                   // si un des input du formulaire est vide alors il ne sera pas accepté
-
-
+            } else if (emptyFirstNameVar != true || emptyLastNameVar != true || emptyAddressVar != true || emptyCityVar != true || emptyEmailVar != true || validateFirstNameVar != true || validateLastNameVar != true || validateAddressVar != true || validateCityVar != true || validateEmailVar != true) {
+                return false                                                   // si un des input du formulaire est vide ou mal rempli alors il ne sera pas accepté
+            
             } else {
-
-                function recupIdProduct() {
+                function recupIdProduct() {                                    // création de la fonction qui me permet de recuperer les Id des canapés commandés
                     let idProduct = [];                                        // on va devoir recreer un nouveau tableau 
                     for (let i = 0; i < basket.length; i++) {                  // dans lequel on incrementer chaque produit commander
                         let eachProductId = basket[i].id;                      // je nomme = chaque i id qui se trouve dans le basket               
