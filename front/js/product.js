@@ -26,6 +26,13 @@ async function displayInfo() {                                                  
   addToTheCart.addEventListener('click', (event) => {                           // Création d'une ecoute evenement (le click du bouton #addToCart)
     event.preventDefault();                                                     // Je l'empeche momentanement de faire son travail  
 
+
+
+
+
+
+
+    
     if (itemQuantity.value > 0 && itemQuantity.value < 101 && ColorSet.value != "") { // Si le chiffre indique par le client est superieur ou egal à 0 et inferieur à 100 et qu'il a une couleur choisie 
       let kanapItem = {                                                         // Creation d'un objet qui liste les produits demandés
         id: productID,
@@ -43,8 +50,22 @@ async function displayInfo() {                                                  
           alert("Votre canapé a été ajouté à votre panier");                    // La methode alert()affiche une boîte d'alerte avec un message et un bouton OK, elle est utilisée lorsque vous souhaitez que des infos parviennent à l'utilisateur. Ne pas en Abuser
         } else {                                                                // sinon 
           let update = false;                                                   // Je le declare pour l'utiliser sous forme true apres 
+          
           for (let i = 0; i < basket.length; i++) {                             // Les boucles for sont pratiques pour exécuter le même code encore et encore, à chaque fois avec une valeur différente.
-            if (kanapItem.id == basket[i].id && kanapItem.color == basket[i].color) { // Si l'id demandé est egale a celle du panier, si la couleur demandé est égale a celle du panier
+           var basketIQuantity = basket[i].quantity;
+           var itemQuantityValue = itemQuantity.value;
+           var itemQuantityValueParse = parseInt(itemQuantityValue);
+           var basketIQuantityParse = parseInt(basketIQuantity);
+           var totalKanapItem = itemQuantityValueParse + basketIQuantityParse;
+           if (basketIQuantity > 100) {
+               alert("Vous avez dépassé la limite autorisé de 100 articles identique en meme temps")
+               return false
+           }else if (kanapItem.id == basket[i].id && kanapItem.color == basket[i].color && totalKanapItem > 100){
+            alert("attention vous ne pouvez pas commander + de 100 articles identique en meme temps")
+            return false
+           }
+           
+            else if (kanapItem.id == basket[i].id && kanapItem.color == basket[i].color) { // Si l'id demandé est egale a celle du panier, si la couleur demandé est égale a celle du panier
               update = true;                                                    // la MISE A JOUR est donc "possible"
               let totalBasket = parseInt(basket[i].quantity) + parseInt(kanapItem.quantity); // La méthode parseInt analyse une valeur sous forme de chaîne et renvoie le premier entier. Mon total sera = ma demande sur l'ecran + ce qui est deja dans le panier
               basket[i].quantity = totalBasket;                                 // le contenu de mon panier me donnera le nouveau total 

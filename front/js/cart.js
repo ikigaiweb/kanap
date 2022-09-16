@@ -4,7 +4,7 @@ async function infoProductApis(id) {                                           /
     if (response.ok) {                                                         // si aucune erreur dans ma demande
         return response.json();                                                // il me renvoie la réponse sous format JSON
     } else {                                                                   // sinon 
-        console.log(`J'en connais Un qui s'est planté`);                       // il m'informa dans la console qu il y a un bintzz
+        console.log(`J'en connais Un qui s'est planté`);                       // il m'informe dans la console qu il y a un bintzzzzz
     }
 }
 
@@ -18,6 +18,7 @@ async function displayCart() {                                                 /
         let info = await infoProductApis(item.id);                             // je rapelle dans cette fonction les infos (id) qui sont dans l'API
         console.log(info);                                                     // Me donne toutes les infos de chaque kanap demandé
         console.log(item.quantity);                                            // Me donne la quantité de chaque Kanapé
+        console.log(item);                                                     // me donne les 3 element demandés dans la page product.html  "quantite couleur et id"
 
         // On "recree les infos données dans le DOM 
         // Article
@@ -35,7 +36,7 @@ async function displayCart() {                                                 /
         const img = document.createElement("img");                             // création de <img> on l'associe à une variable
         cartItemImg.appendChild(img);                                          // cartItemImg a pour enfant img
         img.src = info.imageUrl;                                               // le src de img est dans l'API sous le nom imageUrl 
-        img.alt = info.altTxt;
+        img.alt = info.altTxt;                                                 // le Alt de img est dans l'API sous le nom imageUrl
 
         const cartItemContent = document.createElement("div");                 // création d'une DIV on l'associe à une variable
         cartItemContent.classList.add("cart__item__content");                  // on lui rajoute une <class: ...>
@@ -50,11 +51,11 @@ async function displayCart() {                                                 /
         cartItemContentDescription.appendChild(title);                         // cartItemContentDescription a pour enfant title
 
         const couleur = document.createElement("p");                           // création <p> on l'associe à une variable
-        couleur.innerHTML = item.color;
+        couleur.innerHTML = item.color;                                        // J'ecris sur l'ecran la couleur du kanapé choisi (chaque kanapé)
         cartItemContentDescription.appendChild(couleur);                       // cartItemContentDescription a pour enfant couleur
 
         const prix = document.createElement("p");                              // création <p> on l'associe à une variable
-        prix.innerHTML = info.price + " €";
+        prix.innerHTML = info.price + " €";                                    // J'ecris sur l'ecran le prix du canapé en € (chaque canapé)
         cartItemContentDescription.appendChild(prix);                          // cartItemContentDescription a pour enfant prix
 
         const cartItemContentSettings = document.createElement("div");         // création d'une DIV on l'associe à une variable
@@ -66,17 +67,17 @@ async function displayCart() {                                                 /
         cartItemContentSettings.appendChild(cartItemContentSettingsQuantity);  // cartItemContentSettings a pour enfant cartItemContentSettingsQuantity
 
         const quantite = document.createElement("p");                          // création <p> on l'associe à une variable
-        quantite.innerHTML = "Qté : ";
+        quantite.innerHTML = "Qté : ";                                         // J'ecris sur l'ecran " Qté :  "
         cartItemContentSettingsQuantity.appendChild(quantite);                 // cartItemContentSettingsQuantity a pour enfant quantite
 
         const itemQuantity = document.createElement("input");                  // création <input> on l'associe à une variable
-        itemQuantity.type = "number";
+        itemQuantity.type = "number";                                          // le type de l'input est number
         itemQuantity.classList.add("itemQuantity");                            // on lui rajoute une <class: ...>
-        itemQuantity.name = "itemQuantity";
-        itemQuantity.min = "1";
-        itemQuantity.max = "100";
-        itemQuantity.pattern = "[0123456789]{3}";
-        itemQuantity.value = item.quantity;
+        itemQuantity.name = "itemQuantity";                                    // le nom de l'input est itemQuantity
+        itemQuantity.min = "1";                                                // sa quantité minimum est 1
+        itemQuantity.max = "100";                                              // sa quantité maximum est 100
+        itemQuantity.pattern = "[0123456789]{3}";                              // on ne peut pas inscrire autre chose que des chiffres
+        itemQuantity.value = item.quantity;                                    // la valeur indique (sa quantité demandé) sera la quantité qui s'enregitrera dans le local storage (mais pas encore)
         cartItemContentSettingsQuantity.appendChild(itemQuantity);             // cartItemContentSettingsQuantity a pour enfant itemQuantity
 
         const cartItemContentSettingsDelete = document.createElement("div");   // création d'une DIV on l'associe à une variable
@@ -85,7 +86,7 @@ async function displayCart() {                                                 /
 
         const deleteItems = document.createElement("p");                       // création <p> on l'associe à une variable
         deleteItems.classList.add("deleteItem");                               // on lui rajoute une <class: ...>
-        deleteItems.innerHTML = "Supprimer";
+        deleteItems.innerHTML = "Supprimer";                                   // j'ecris le mot supprimer sur l'ecran
         cartItemContentSettingsDelete.appendChild(deleteItems);                // cartItemContentSettingsDelete a pour enfant deleteItems
 
         // *** event listener pour supprimer un article (pas besoin de fair eune focntion pour les rajouter, idem pour update)
