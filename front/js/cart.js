@@ -1,6 +1,6 @@
 //Récupération des produits stockés dans l'api
 async function infoProductApis(id) {                                           // on rapelle l'API car certaines info ne se trouve pas dans le localStorage  ** doit être lié a id  
-    let response = await fetch("http://localhost:3000/api/products/" + id)     // je recherche à avoir l'ID de chaque produit qui se trouve dans l'API
+    let response = await fetch("http://localhost:3000/api/products/" + id)     // je recherche à récuperer l'ID de chaque produit qui se trouve dans l'API
     if (response.ok) {                                                         // si aucune erreur dans ma demande
         return response.json();                                                // il me renvoie la réponse sous format JSON
     } else {                                                                   // sinon 
@@ -107,7 +107,7 @@ async function displayCart() {                                                 /
         })
         itemQuantity.addEventListener("change", (event) => {                   // quand le client clique sur la double fleches (haut et bas) je ...
             
-            let basket = JSON.parse(localStorage.getItem("localBasket"));      // Nouvelle fonction, ont a pas accès au ancienne info donc je la reappelle
+            let basket = JSON.parse(localStorage.getItem("localBasket"));      // Nouvelle fonction, on n a pas accès au ancienne info donc je la reappelle
             let article = event.target.closest("article");                     // Je recupére l'article le plus proche (donc le parent)
             let id = article.dataset.id;                                       // je récupére les data-id ENCORE une fois puisque nouvelle fonction
             let color = article.dataset.color;                                 // je récupére les data-color ENCORE une fois puisque nouvelle fonction
@@ -379,23 +379,23 @@ submit.addEventListener("click", function (event) {                            /
                 };
 
                 const request = {                                              // ma requete Post
-                    method: "POST",                                            // methode "post"
+                    method: "POST",                                            // methode "post" qui me permet de creer (ou update) une nouvelle donnée (le formulaire)
                     headers: {
-                        "Content-Type": "application/json",
+                        "Content-Type": "application/json",                    // informe ma requete qu'elle sera en format JSON
                         'Accept': 'application/json'
                     },
-                    body: JSON.stringify(recupInfo)                            //
+                    body: JSON.stringify(recupInfo)                            //  je la convertis en string pour le format JSON
                 };
 
-                fetch("http://localhost:3000/api/products/order", request)     //
-                    .then(function (response) {                                //
-                        return response.json();                                //
+                fetch("http://localhost:3000/api/products/order", request)     // Avec la methode FLETCH j'enclenche le processus de récuperation des mes données en provenance de l'Api
+                    .then(function (response) {                                // puis 
+                        return response.json();                                // il analyse la reponse en tant qu'objet JSON
                     })
-                    .then(data => {                                            //
-                        console.log(data.orderId);                             //
-                        // localStorage.clear();                               // une fois la commande enregistré mon panier se vide
-                        location.href = "confirmation.html?orderId=" + data.orderId; // Je meretrouve redirigé vers la page "confirmation.html" avce l'id de la commande (numero de bon de commande)
-                    }).catch(error => {                                        // et oui il faut un catch si il ya une promesse then 
+                    .then(data => {                                            // puis je recupere mes datas
+                        console.log(data.orderId);                             // Mon numero de commande apparait ( si on veut le voir ne pas oublier de bloquer la redirection vers la page "confirmation")
+                         localStorage.clear();                               // une fois la commande enregistré mon panier se vide
+                      location.href = "confirmation.html?orderId=" + data.orderId; // Je meretrouve redirigé vers la page "confirmation.html" avce l'id de la commande (numero de bon de commande)
+                    }).catch(error => {                                        // et puis si il y a une erreur ... oui il faut un catch si il ya une promesse then 
                         console.log(error);                                    // afficher l'erreur
                     })
             }
@@ -405,3 +405,8 @@ submit.addEventListener("click", function (event) {                            /
     }
 
 )
+
+// POST est presque toujours favorisé lorsque l’utilisateur doit soumettre des données ou des fichiers au serveur, par exemple pour remplir des formulaires ou télécharger des photos.
+// POST pour la transmission des informations et des données de l’utilisateur.
+// GET est particulièrement bien adapté pour personnaliser les sites Web : les recherches des utilisateurs, les paramètres de filtrage et le tri des listes peuvent être mis en marque-page avec l’URL, de sorte qu’à la prochaine visite du site, l’utilisateur retrouvera la page telle qu’il l’a laissée.
+// GET pour les paramètres d’un site Web (filtres, tri, saisies de recherche, etc.).
